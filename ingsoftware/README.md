@@ -1,4 +1,4 @@
-# My Awesome Project
+# FundVE - Ing Software periodo 2-2023
 
 Proyecto de ing de software periodo 2-2023
 
