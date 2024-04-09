@@ -348,3 +348,22 @@ SPECTACULAR_SETTINGS = {
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
+BOOTSTRAP5 = {
+
+    # The complete URL to the Bootstrap CSS file
+    # Note that a URL can be either a string,
+    # e.g. "https://stackpath.bootstrapcdn.com/bootstrap/5.1.1/css/bootstrap.min.css",
+    # or a dict like the default value below.
+    "css_url": {
+        "href": "/static/css/bootstrap.min.css",
+        "integrity": "",
+        "crossorigin": "anonymous",
+    },
+
+    # The complete URL to the Bootstrap JavaScript file
+    "javascript_url": {
+        "url": "static/js/bootstrap.bundle.js",
+        "integrity": "",
+        "crossorigin": "anonymous",
+    },
+}

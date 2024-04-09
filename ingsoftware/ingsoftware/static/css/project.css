@@ -1,13 +1,6 @@
-/* These styles are generated from project.scss. */
-
-.alert-debug {
-  color: black;
-  background-color: white;
-  border-color: #d6e9c6;
-}
-
-.alert-error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
+#foreground {
+  height: 70vh; /* Establece la mitad del alto de la vista inicial */
+  background-image: url("/static/images/fundme_bg_1.webp");
+  background-size: auto; /* Ajusta la imagen para cubrir toda la sección */ /* Ajusta la imagen para cubrir toda la sección */
+  background-position: center; /* Centra la imagen */
 }
