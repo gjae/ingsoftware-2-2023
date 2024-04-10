@@ -4,3 +4,24 @@
   background-size: auto; /* Ajusta la imagen para cubrir toda la sección */ /* Ajusta la imagen para cubrir toda la sección */
   background-position: center; /* Centra la imagen */
 }
+
+.font-bolder {
+  font-weight: bold !important;
+  color: black;
+  font-size: 18px;
+}
+
+.bg-success-dark {
+  --bs-bg-opacity: 1;
+  background-color: rgb(9 89 52) !important;
+}
+
+.found-categories {
+  border-bottom: 1px solid black;
+}
+
+.found-categories:hover {
+  cursor: pointer;
+  color: gray;
+  border-bottom: 1px solid darkgray;
+}

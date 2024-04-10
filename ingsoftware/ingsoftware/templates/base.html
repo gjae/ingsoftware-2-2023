@@ -3,88 +3,307 @@
 {% get_current_language as LANGUAGE_CODE %}
 {% load bootstrap5 %}
 <html lang="{{ LANGUAGE_CODE }}">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>{% block title %} My Awesome Project {% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Proyecto de ing de software periodo 2-2023"
-    />
-    <meta name="author" content="Equipo 1" />
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
-    {# Load CSS and JavaScript #}
-    <link rel="stylesheet" href="{% static 'css/project.css' %}">
-    {% bootstrap_css %}    
-  </head>
-  <body class="{% block bodyclass %}{% endblock bodyclass %}">
-    <nav class="navbar navbar-expand-lg bg-success navbar-nav-scroll">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">FundVE</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dropdown
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-            </li>
-          </ul>
-          <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-    {% block body %} 
-      <main class="w-100">
-        <section id="foreground">
-          
-          <form action="" method="post" class="h-100">
-            {% csrf_token %}
-            <div class="form-row h-100">
-              <div class="col-9 col-lg-4 col-xl-4 offset-2 offset-lg-4 h-100 d-flex flex-column justify-content-center">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Título" aria-label="Recipient's username with two button addons">
-                  <button class="btn btn-success" type="button">Crear Campaña</button>
-                </div>
-              </div>
-            </div>
-          </form>
 
-        </section>
-      </main>
-      <section id="main-content">
-        <div class="container">
-          <div class="row">
-            <div class="col-12 text-center pt-2">
-              <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h3>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="x-ua-compatible" content="ie=edge" />
+  <title>{% block title %} My Awesome Project {% endblock title %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Proyecto de ing de software periodo 2-2023" />
+  <meta name="author" content="Equipo 1" />
+  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+  {# Load CSS and JavaScript #}
+  <link rel="stylesheet" href="{% static 'css/project.css' %}">
+  {% bootstrap_css %}
+</head>
+
+<body class="d-flex flex-column h-100 {% block bodyclass %}{% endblock bodyclass %}">
+  <nav class="navbar navbar-expand-lg bg-success navbar-nav-scroll">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">FundVE</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Misión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Visión</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Ver Campañas</a>
+          </li>
+          <li class="nav-item pt-1">
+            <a class="btn btn-warning btn-sm" aria-disabled="true">
+              Registrarme
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% block body %}
+  <main class="w-100">
+    <section id="foreground">
+
+      <form action="" method="post" class="h-100">
+        {% csrf_token %}
+        <div class="form-row h-100">
+          <div class="col-9 col-lg-4 col-xl-4 offset-2 offset-lg-4 h-100 d-flex flex-column justify-content-center">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Título"
+                aria-label="Recipient's username with two button addons">
+              <button class="btn btn-success" type="button">Crear Campaña</button>
             </div>
           </div>
         </div>
-      </section>
-    {% endblock body %}
+      </form>
 
-    
-    {% bootstrap_javascript %}
-  </body>
+    </section>
+  </main>
+  <section id="main-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center pt-2">
+          <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h3>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12 text-center">
+          <h4><strong>Testimonios</strong></h4>
+          <small>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Earum molestiae sequi cum nisi ex repellat
+            laboriosam est esse natus doloribus aliquid dolorem, nemo assumenda, necessitatibus animi amet optio, quas
+            voluptate?</small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <hr>
+        </div>
+      </div>
+      <div class="row py-2 lead" style="font-size: 15px;">
+        <div class="col-sm-12 col-md-4 col-lg-4">
+          <article class="d-flex flex-column align-items-center justify-content-center">
+            <picture>
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRETs5uSd4aiezSeNdlfIOPK9uhxhLguRGK4CuQxZQmgg&s"
+                alt="Flowers" class="img-fluid img-thumbnail rounded">
+            </picture>
+            <strong class="text-secondary font-bolder">
+              Jhon Doe
+              <hr>
+            </strong>
+            <p style="text-align: center;">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quisquam consequuntur doloremque
+              adipisci sed, distinctio vero incidunt, asperiores inventore, exercitationem eaque nesciunt quo
+              repellendus quaerat fuga neque laborum labore perferendis!
+            </p>
+          </article>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-4">
+          <article class="d-flex flex-column align-items-center justify-content-center">
+            <picture>
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRETs5uSd4aiezSeNdlfIOPK9uhxhLguRGK4CuQxZQmgg&s"
+                alt="Flowers" class="img-fluid img-thumbnail rounded">
+            </picture>
+            <strong class="text-secondary font-bolder">
+              Jhon Doe
+              <hr>
+            </strong>
+            <p style="text-align: center;">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quisquam consequuntur doloremque
+              adipisci sed, distinctio vero incidunt, asperiores inventore, exercitationem eaque nesciunt quo
+              repellendus quaerat fuga neque laborum labore perferendis!
+            </p>
+          </article>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-4">
+          <article class="d-flex flex-column align-items-center justify-content-center">
+            <picture>
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRETs5uSd4aiezSeNdlfIOPK9uhxhLguRGK4CuQxZQmgg&s"
+                alt="Flowers" class="img-fluid img-thumbnail rounded">
+            </picture>
+            <strong class="text-secondary font-bolder">
+              Jhon Doe
+              <hr>
+            </strong>
+            <p style="text-align: center;">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quisquam consequuntur doloremque
+              adipisci sed, distinctio vero incidunt, asperiores inventore, exercitationem eaque nesciunt quo
+              repellendus quaerat fuga neque laborum labore perferendis!
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <div class="row pt-3">
+        <div class="col-12 text-sm-center text-md-start text-lg-start text-xs-center text-xl-start">
+          <h4><strong>¿Te sientes caritativo hoy?</strong></h4>
+          <small class="text-secondary text-decoration-underline lend">Mira las últimas campañas en nuestro sistema</small>
+        </div>
+        <div class="row pt-2"></div>
+        <div class="row">
+          <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="card w-100 mt-4" style="width: 18rem;">
+              <img src="..." class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+
+                <div class="col-12">
+                  <hr>
+                  <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-success" style="width: 25%"></div>
+                  </div>
+                  <p class="lend fw-medium  text-dark fs-6">
+                    63.500,00 $ Recaudados hasta la fecha
+                  </p>
+                </div>
+                <a href="#" class="btn btn-primary mt-2">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="card w-100 mt-4" style="width: 18rem;">
+              <img src="..." class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <div class="col-12">
+                  <hr>
+                  <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-success" style="width: 25%"></div>
+                  </div>
+                  <p class="lend fw-medium  text-dark fs-6">63.500,00 $ Recaudados hasta la fecha</p>
+                </div>
+                <a href="#" class="btn btn-primary mt-2">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="card w-100 mt-4" style="width: 18rem;">
+              <img src="..." class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <div class="col-12">
+                  <hr>
+                  <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar bg-success" style="width: 25%"></div>
+                  </div>
+                  <p class="lend fw-medium  text-dark fs-6">63.500,00 $ Recaudados hasta la fecha</p>
+                </div>
+                <a href="#" class="btn btn-primary mt-2">Go somewhere</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 py-2">
+            <a href="" class="text-decoration-none fw-medium">Ver más</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="container-fluid px-0 py-4">
+      <div class="col-12 bg-success-dark py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h1 class="text-white">Estamos a tu lado.</h1>
+            </div>
+          </div>
+          <div class="row text-white">
+            <div class="col-12" style="font-family: Helvetica, Arial, sans-serif;">
+              <h3>Vestibulum et interdum turpis. Donec faucibus lorem eu turpis pharetra volutpat. Phasellus pulvinar scelerisque leo, vulputate congue mauris suscipit lacinia. Etiam ac augue ut nulla pulvinar lobortis. Cras et elit enim. Proin tempus eget metus vel suscipit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris facilisis nunc libero, eget efficitur turpis pulvinar eu. Donec sollicitudin at lorem vel iaculis. Aliquam accumsan hendrerit fermentum.</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mb-4">
+      <div class="row">
+        <strong>Recauda fondos para amigos, familiares o proyectos personales</strong>
+      </div>
+      <div class="row">
+        <div class="col-12 py-5 found-categories">
+            <h2 class="mb-4">Para ti mismo</h2>
+            <h4 class="fw-normal">Los fondos se envían a tu cuenta bancaria</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 py-5 found-categories">
+            <h2 class="mb-4">Amigos y Familiares</h2>
+            <h4 class="fw-normal">Invitarás a un beneficiario para que reciba los fondos</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 py-5 found-categories">
+            <h2 class="mb-4">Una comunidads</h2>
+            <h4 class="fw-normal">¿Conoces a alguien en tu comunidad que necesite tu ayuda? El dinero que recaudes para otros va directamente a ellos.</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endblock body %}
+
+  <footer class="footer mt-auto py-3">
+    <div class="container-fluid">
+      <div class="row bg-secondary">
+        <div class="col-sm-12 col-md-2 col-lg-2 text-center">
+          <picture>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSoxUgLbWI62p4JZvGNqL2JqMmD_JFrxPIRpzo4GrudSeKpYdUgr437kmJBeyRvCBqWJg&usqp=CAU"
+              alt="">
+          </picture>
+        </div>
+        <div class="col text-center h-100 pt-5 mb-4">
+          <div class="text-white">
+            <div class="row h-100">
+              <div class="col-12 pt-5 text-center">
+                Términos de uso • Política de privacidad • Aviso legal • Política de cookies
+              </div>
+            </div>
+            <div class="row h-100">
+              <div class="col-12 pt-1 text-center">
+                Prevención de blanqueo de capitales • Derecho de propiedad intelectual • Servicios y precios
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-2 col-lg-2 d-flex flex-row justify-content-center align-items-center pb-2">
+          <picture>
+            <img src="https://waiterup.com/assets/img/landing/instagram-icon.png" width="50px" alt="">
+          </picture>
+          <picture>
+            <img src="https://waiterup.com/assets/img/landing/facebook-icon.png" width="50px" alt="">
+          </picture>
+          <picture>
+            <img src="https://waiterup.com/assets/img/landing/linkedin-icon.png" width="50px" alt="">
+          </picture>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <hr>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center text-muted ">
+          &copy; FundVE - {% now "Y" %} Todos los derechos reservados
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  {% bootstrap_javascript %}
+</body>
+
 </html>
