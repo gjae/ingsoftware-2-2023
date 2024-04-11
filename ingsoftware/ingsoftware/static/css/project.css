@@ -39,3 +39,10 @@ footer{
   border-top-right-radius: 3%;
   border-top-left-radius: 3%;
 }
+
+.sticky-area {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top:0;
+  margin-top: 22px;
+}
