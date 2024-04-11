@@ -25,3 +25,8 @@
   color: gray;
   border-bottom: 1px solid darkgray;
 }
+
+.non-index-page {
+  border-top-right-radius: 3%;
+  border-top-left-radius: 3%;
+}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Últimas campañas abiertas{% endblock title %}
+
+{% block body %}
+
+<div class="container-fluid w-100 h-100 pt-4 bg-success-dark">
+    <div class="row px-0">
+        <div class="col-12 px-0 w-100">
+            <div class="container-fluid bg-white non-index-page w-100">
+                <div class="row">
+                    <div class="col-6 pt-2">
+                        <form action="" method="get">
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <input type="search" name="q" id="id_q" placeholder="Buscar" class="form-control w-75">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-6 d-flex flex-row justify-content-end pt-2">
+                        <button class="btn btn-light">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    {% for camp in object_list %}
+                        {% include 'components/campaing_card.html' %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

@@ -83,10 +83,12 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "drf_spectacular",
     "bootstrap5",
+    'django_filters',
 ]
 
 LOCAL_APPS = [
     "ingsoftware.users",
+    "ingsoftware.campaigns",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -367,3 +369,5 @@ BOOTSTRAP5 = {
         "crossorigin": "anonymous",
     },
 }
+
+THOUSAND_SEPARATOR = "."
