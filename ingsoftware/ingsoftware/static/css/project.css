@@ -1,3 +1,12 @@
+body{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+footer{
+  margin-top: auto;
+}
+
 #foreground {
   height: 70vh; /* Establece la mitad del alto de la vista inicial */
   background-image: url("/static/images/fundme_bg_1.webp");
