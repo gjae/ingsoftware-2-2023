@@ -92,7 +92,7 @@
                                     Donar ahora
                                 </button>
                                 {% else %}
-                                <a href="/donate/{{campaign.id}}/" class="btn btn-warning btn-block btn-lg w-100">
+                                <a href="{% url 'campaigns.donatives.donate' pk=campaign.pk %}" class="btn btn-warning btn-block btn-lg w-100">
                                     Donar ahora
                                 </a>
                                 {% endif %}

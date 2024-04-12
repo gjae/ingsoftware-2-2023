@@ -38,6 +38,7 @@ urlpatterns = [
     path("users/", include("ingsoftware.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     path("campaigns/", include("ingsoftware.campaigns.urls")),
+    path("campaings/donative/", include("ingsoftware.donatives.urls")),
     # Your stuff: custom urls includes go here
     # ...
     # Media files
