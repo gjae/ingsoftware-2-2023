@@ -19,7 +19,7 @@ class HomeTemplateView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["camps"] = Campaign.objects.list_preview()[0:2]
+        context["camps"] = Campaign.objects.list_preview()[0:3]
         context["beneficiaries"] = Beneficiary.objects.get_queryset()[0:3]
 
         return context

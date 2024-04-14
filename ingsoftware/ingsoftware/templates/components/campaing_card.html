@@ -16,7 +16,7 @@
           </p>
         </div>
         <a href="{% url 'campaign.details' pk=camp.id %}" class="btn btn-primary mt-2">Ver Más</a>
-        <a href="{% url 'campaign.details' pk=camp.id %}" class="btn btn-warning text-white mt-2">Donar Ahora</a>
+        <a href="{% url 'campaigns.donatives.donate' pk=camp.id %}" class="btn btn-warning text-white mt-2">Donar Ahora</a>
       </div>
     </div>
 </div>
