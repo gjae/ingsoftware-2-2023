@@ -65,14 +65,13 @@
   <main class="w-100">
     <section id="foreground">
 
-      <form action="" method="post" class="h-100">
-        {% csrf_token %}
+      <form action="{% url 'campaign.create' %}" method="get" class="h-100">
         <div class="form-row h-100">
           <div class="col-9 col-lg-4 col-xl-4 offset-2 offset-lg-4 h-100 d-flex flex-column justify-content-center">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Título"
+              <input type="text" required name="title" class="form-control" placeholder="Título"
                 aria-label="Recipient's username with two button addons">
-              <button class="btn btn-success" type="button">Crear Campaña</button>
+              <button class="btn btn-success" type="submit">Crear Campaña</button>
             </div>
           </div>
         </div>
@@ -197,24 +196,14 @@
       <div class="row">
         <strong>Recauda fondos para amigos, familiares o proyectos personales</strong>
       </div>
-      <div class="row">
+      {% for beneficiary in beneficiaries %}
+      <div class="row auto-create-campaign" onclick="redirectToCreateNewCampagin(event, this)" data-beneficiary-id="{{beneficiary.pk}}">
         <div class="col-12 py-5 found-categories">
-            <h2 class="mb-4">Para ti mismo</h2>
-            <h4 class="fw-normal">Los fondos se envían a tu cuenta bancaria</h4>
+            <h2 class="mb-4">{{beneficiary.alternative_title}}</h2>
+            <h4 class="fw-normal">{{beneficiary.funds_destination}}</h4>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12 py-5 found-categories">
-            <h2 class="mb-4">Amigos y Familiares</h2>
-            <h4 class="fw-normal">Invitarás a un beneficiario para que reciba los fondos</h4>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-12 py-5 found-categories">
-            <h2 class="mb-4">Una comunidads</h2>
-            <h4 class="fw-normal">¿Conoces a alguien en tu comunidad que necesite tu ayuda? El dinero que recaudes para otros va directamente a ellos.</h4>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </section>
   {% endblock body %}
@@ -271,6 +260,14 @@
   {% bootstrap_javascript %}
   <script src="https://kit.fontawesome.com/de6900bfc3.js" crossorigin="anonymous"></script>
   <script src="{% static 'js/project.js' %}"></script>
+  <script>
+    function redirectToCreateNewCampagin(event, e) {
+      location.href = `/campaigns/create/?beneficiary=${e.getAttribute("data-beneficiary-id")}`
+    }
+
+  </script>
+  {% block js %}
+  {% endblock js%}
 </body>
 
 </html>

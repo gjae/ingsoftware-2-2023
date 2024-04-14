@@ -6,6 +6,11 @@ window.onload = () => {
      * de hacer el donativo
      */
     window.addEventListener("scroll", (e)=> {
+        const stickyArea = document.getElementById("sticky-area")
+        if (stickyArea == null){
+            return false
+        }
+        
         if (window.scrollY > 1) {
             console.log("STICKY")
             document.getElementById("sticky-area").classList.add("sticky-area")

@@ -1,7 +1,7 @@
 
 <div class="col-sm-12 col-md-4 col-lg-4">
     <div class="card w-100 mt-4" style="width: 18rem;">
-      <img src="/media/{{camp.img_frontpage}}"  class="card-img-top img-thumbnail" alt="...">
+      <img src="/media/{{camp.img_frontpage}}"  class="card-img-top img-thumbnail" style="max-height: 138px" alt="...">
       <div class="card-body">
         <h5 class="card-title">{{camp.title}}</h5>
         <p class="card-text">{{camp.summary}}</p>
@@ -12,7 +12,7 @@
             <div class="progress-bar bg-success" style="width: {{camp.current_progress|floatformat:0}}%"></div>
           </div>
           <p class="lend fw-medium  text-dark fs-6">
-            {{camp.target|floatformat:"2g"}} $ Recaudados hasta la fecha
+            {{camp.target|floatformat:"2g"}} $ Como meta
           </p>
         </div>
         <a href="{% url 'campaign.details' pk=camp.id %}" class="btn btn-primary mt-2">Ver Más</a>

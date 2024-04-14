@@ -29,6 +29,23 @@ class Beneficiary(TimeStampedModel):
         "A quien va dirigido"
     )
 
+    alternative_title = models.CharField(
+        "Destino de los fondos recaudados",
+        max_length=100,
+        blank=True,
+        default=""
+    )
+
+    funds_destination = models.CharField(
+        "Destino de los fondos recaudados",
+        max_length=100,
+        blank=True,
+        default=""
+    )
+
+    def __str__(self):
+        return self.Beneficiary
+
 
 class Campaign(TimeStampedModel, SoftDeletableModel):
     STATUS = Choices(
@@ -60,10 +77,11 @@ class Campaign(TimeStampedModel, SoftDeletableModel):
     tags = ArrayField(
         models.CharField(max_length=32),
         size=32,
-        help_text="Etiquetas de la publicación",
-        db_index=True
+        help_text="Etiquetas de la publicación, ejemplo: tag1,tag2",
+        db_index=True,
+        verbose_name="Etiquetas de la campaña separadas por coma"
     )
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="campaigns")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="campaigns", verbose_name="Categoría")
     img_frontpage = models.ImageField(
         "Imagen de portada",
         upload_to=user_directory_path
@@ -81,7 +99,7 @@ class Campaign(TimeStampedModel, SoftDeletableModel):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="campaigns")
     status = models.IntegerField(choices=STATUS, default=STATUS.draft)
-    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE, related_name="campaigns")
+    beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE, related_name="campaigns", verbose_name="Beneficiario")
 
     objects = CampaignModelManager()
 

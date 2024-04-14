@@ -11,7 +11,7 @@ from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 from rest_framework.authtoken.views import obtain_auth_token
 
-from ingsoftware.campaigns.models import Campaign
+from ingsoftware.campaigns.models import Campaign, Beneficiary
 
 class HomeTemplateView(TemplateView):
     template_name="pages/home.html"
@@ -20,6 +20,7 @@ class HomeTemplateView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         context["camps"] = Campaign.objects.list_preview()[0:2]
+        context["beneficiaries"] = Beneficiary.objects.get_queryset()[0:3]
 
         return context
 

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% load crispy_forms_tags  %}
+
+{% block title %}FundVE | Inicial nueva campaña{% endblock %}
+
+{% block body %}
+
+<div class="container py-5">
+    <div class="row">
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form action="" enctype="multipart/form-data" method="post" class="w-100">
+                {% csrf_token %}
+                <input type="hidden" name="user" value="{{request.user.id}}">
+                <div class="form-row">
+                    <div class="col-12">
+                        {{ form.title|as_crispy_field }}
+                    </div>
+                    <div class="col-sm-12">
+                        {{ form.body|as_crispy_field }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        {{form.tags|as_crispy_field}}
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        {{form.img_frontpage|as_crispy_field}}
+                    </div>
+                    <div class="col-12">
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        {{ form.beneficiary|as_crispy_field  }}
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        {{ form.category|as_crispy_field  }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        {{ form.target|as_crispy_field  }}
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        {{ form.date_target|as_crispy_field  }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        {% buttons submit='Guardar' reset="Cancelar" %}{% endbuttons %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
+{% block js %}
+<script src="https://cdn.tiny.cloud/1/n8qhwp6ivk1phgcn2txd10qpkuo0hu6v1uvby6pkbld2g39k/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+<script>
+</script>
+{% endblock %}
