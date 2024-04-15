@@ -8,6 +8,8 @@ from django.contrib.messages import error
 from .forms import DonativeCreateForm, CommentCreateForm
 from ingsoftware.campaigns.models import Campaign
 from ingsoftware.donatives.models import Donation
+from ingsoftware.users.models import PaymentMethod
+
 
 class DonativeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = "donatives/create.html"
@@ -21,6 +23,11 @@ class DonativeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs) 
         context["campaign"] = self.get_campaign_object()
+        context["receiver_payment_methods"] = PaymentMethod.objects.select_related("based").filter(user_id=context["campaign"].user_id)
+        context["method_selected"] = None
+        if "method_selected" in self.request.GET:
+            context["method_selected"] = PaymentMethod.objects.select_related("based").get(id=int(self.request.GET.get("method_selected")))
+
         return context
     
     def get(self, request, *args, **kwargs):
@@ -36,7 +43,6 @@ class DonativeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             if "comment" in self.request.POST and self.request.POST.get("comment", "-") != "-":
                 initial = self.request.POST.copy()
                 initial["donation"] = self.object.id
-                print(initial)
                 comment_form = CommentCreateForm(initial)
                 comment_form.is_valid()
                 comment_form.save()

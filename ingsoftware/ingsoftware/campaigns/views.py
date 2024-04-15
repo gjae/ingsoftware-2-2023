@@ -10,6 +10,7 @@ from django.db.models import F
 
 from ingsoftware.campaigns.models import Campaign
 from ingsoftware.campaigns.forms import CampaignCreateForm
+from ingsoftware.donatives.models import Donation
 
 
 class CampaingsListView(ListView):
@@ -34,6 +35,16 @@ class CampaignDetailView(DetailView):
                 )
             )
     
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        obj = Campaign.objects.filter(pk=self.kwargs.get("pk")).values("user_id").first()
+
+        context["first_donator"] = Donation.objects.filter(campaign_id=self.kwargs.get("pk")).values("mark_as_annonymous", "user__name", "amount").order_by("created").first()
+        context["most_important_donator"] = Donation.objects.filter(campaign_id=self.kwargs.get("pk")).values("mark_as_annonymous", "user__name", "amount").order_by("-amount").first()
+        context["last_donator"] = Donation.objects.filter(campaign_id=self.kwargs.get("pk")).values("mark_as_annonymous", "user__name", "amount").order_by("created").last()
+        
+        return context
+    
 
 class CreateCampaignFormView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     template_name = "campaigns/create.html"
@@ -49,4 +60,5 @@ class CreateCampaignFormView(LoginRequiredMixin, SuccessMessageMixin, CreateView
         kwargs = super().get_form_kwargs(*args, **kwargs)
         kwargs["title"] = self.request.GET.get("title", None)
         kwargs["beneficiary"] = self.request.GET.get("beneficiary", None)
+
         return kwargs

@@ -62,33 +62,57 @@
                         <div class="row">
                             <div class="col-12">
                                 <ul class="list-group">
+                                    {% if last_donator %}
                                     <li class="list-group-item">
                                         <div class="w-100 d-flex flex-row align-items-center">
                                             <i class="fas fa-heart"></i> 
                                             <div class="d-flex flex-column mx-4">
                                                 <strong class="lead fw-bolder">última donación</strong>
-                                                <small class="lead fs-6">Anonimo - 5 00,00 $</small>
+                                                <small class="lead fs-6">
+                                                    {% if last_donator.mark_as_annonymous %}
+                                                        Anónimo
+                                                    {% else %}
+                                                        {{last_donator.user__name}}
+                                                    {% endif %} - {{  last_donator.amount|floatformat:"2g" }} $
+                                                </small>
                                             </div>
                                         </div>
                                     </li>
+                                    {% endif %}
+                                    {% if most_important_donator %}
                                     <li class="list-group-item">
                                         <div class="w-100 d-flex flex-row align-items-center">
                                             <i class="fas fa-heart"></i> 
                                             <div class="d-flex flex-column mx-4">
                                                 <strong class="lead fw-bolder">Donación más importante</strong>
-                                                <small class="lead fs-6">Anonimo - 5 00,00 $</small>
+                                                <small class="lead fs-6">
+                                                    {% if most_important_donator.mark_as_annonymous %}
+                                                        Anónimo
+                                                    {% else %}
+                                                        {{most_important_donator.user__name}}
+                                                    {% endif %} - {{  most_important_donator.amount|floatformat:"2g" }} $
+                                                </small>
                                             </div>
                                         </div>
                                     </li>
+                                    {% endif %}
+                                    {% if first_donator %}
                                     <li class="list-group-item">
                                         <div class="w-100 d-flex flex-row align-items-center">
                                             <i class="fas fa-heart"></i> 
                                             <div class="d-flex flex-column mx-4">
                                                 <strong class="lead fw-bolder">Primera donación</strong>
-                                                <small class="lead fs-6">Anonimo - 5 00,00 $</small>
+                                                <small class="lead fs-6">
+                                                    {% if first_donator.mark_as_annonymous %}
+                                                        Anónimo
+                                                    {% else %}
+                                                        {{first_donator.user__name}}
+                                                    {% endif %} - {{  first_donator.amount|floatformat:"2g" }} $
+                                                </small>
                                             </div>
                                         </div>
                                     </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </div>

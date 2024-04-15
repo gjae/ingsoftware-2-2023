@@ -1,3 +1,4 @@
+from django import forms
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django.contrib.auth import forms as admin_forms
@@ -34,6 +35,12 @@ class UserSignupForm(SignupForm):
     Default fields will be added automatically.
     Check UserSocialSignupForm for accounts created from social.
     """
+
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={"placeholder": "Ingresa tu nombre completo"}),
+        required=True,
+        label="Nombre completo"
+    )
 
 
 class UserSocialSignupForm(SocialSignupForm):

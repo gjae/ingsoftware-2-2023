@@ -3,9 +3,10 @@ from django.contrib.auth import get_user_model
 from model_utils.models import TimeStampedModel
 
 from ingsoftware.campaigns.models import Campaign, user_directory_path
-
+from ingsoftware.users.models import PaymentMethod
 
 User = get_user_model()
+
 
 class Donation(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="donations")
@@ -16,6 +17,15 @@ class Donation(TimeStampedModel):
     voucher = models.FileField(upload_to=user_directory_path, null=True, default=None)
     transaction_code = models.CharField("Codigo de la transaccion", db_index=True, max_length=10, blank=True, default="")
     mark_as_annonymous = models.BooleanField("Marcar donativo como anonimo", default=False)
+
+    payment_method = models.ForeignKey(
+        PaymentMethod, 
+        on_delete=models.RESTRICT, 
+        null=True, 
+        default=None, 
+        verbose_name="donatives", 
+        related_name="donatives"
+    )
 
     class PreventCampaignOwnAutoDonativeException(Exception):
         pass
