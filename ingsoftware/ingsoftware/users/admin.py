@@ -52,3 +52,7 @@ class UserAdmin(auth_admin.UserAdmin):
 @admin.register(PaymentMethodBasedInformation)
 class PaymentMethodBasedInformationModelAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(PaymentMethod)
+class PaymentMethodModelAdmin(admin.ModelAdmin):
+    pass

@@ -52,3 +52,4 @@ class DonativeCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             return HttpResponseRedirect(self.request.META["HTTP_REFERER"])
 
         return response
+    

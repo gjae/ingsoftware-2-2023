@@ -1,4 +1,4 @@
-
+import json
 from typing import ClassVar
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField
@@ -20,6 +20,12 @@ PAYMENT_METHOD_CHOICES = Choices(
     (3, "div", "Divisas"),
     (4, "tdiv", "Transferencia de divisas electronicas"),
     (5, "otr", "Otras"),
+)
+
+PAYMENT_ACCOUNT_TYPES = Choices(
+    (0, "co", "Corriente"),
+    (1, "ah", "Ahorros"),
+    (2, "otr", "Otros"),
 )
 
 class User(AbstractUser):
@@ -67,6 +73,28 @@ class PaymentMethod(TimeStampedModel):
     payment_method = models.PositiveIntegerField(choices=PAYMENT_METHOD_CHOICES)
     account_named = models.CharField("Titular de la cuenta", max_length=85)
     account_number = models.CharField("Número de cuenta", max_length=100, db_index=True)
+    account_note = models.CharField("Agrega una nota", max_length=200, blank=True, default="")
+    account_type = models.PositiveSmallIntegerField("Tipo de cuenta", choices=PAYMENT_ACCOUNT_TYPES, null=True, default=None)
     based = models.ForeignKey(PaymentMethodBasedInformation, on_delete=models.RESTRICT, related_name="payment_methods")
 
 
+    @property
+    def to_json(self):
+        return json.dumps({
+            "id": self.pk,
+            "payment_method": {
+                "id": self.payment_method,
+                "display": self.based.icon.url
+            },
+            "account": {
+                "account_number": self.account_number,
+                "account_named": self.account_named,
+                "account_type": self.get_account_type_display(),
+                "note": self.account_note,
+                "type": {
+                    "id": self.based_id,
+                    "bank": self.based.bank,
+                    "card_id": self.card_id
+                }
+            }
+        })

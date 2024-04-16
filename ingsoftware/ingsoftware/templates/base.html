@@ -14,7 +14,8 @@
   <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
   {# Load CSS and JavaScript #}
   <link rel="stylesheet" href="{% static 'css/project.css' %}">
-  {% bootstrap_css %}
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  {% block head %}{% endblock head%}
 </head>
 
 <body class="d-flex flex-column h-100 {% block bodyclass %}{% endblock bodyclass %}" id="documentBody">
@@ -262,8 +263,8 @@
     </div>
   </footer>
 
-  {% bootstrap_javascript %}
   <script src="https://kit.fontawesome.com/de6900bfc3.js" crossorigin="anonymous"></script>
+  <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
   <script src="{% static 'js/project.js' %}"></script>
   <script>
     function redirectToCreateNewCampagin(event, e) {
