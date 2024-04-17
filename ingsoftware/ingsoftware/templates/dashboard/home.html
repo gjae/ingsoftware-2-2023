@@ -1,5 +1,5 @@
 {% extends 'dashboard/base.html' %}
-
+{% load humanize %}
 {% block body %}
 
 <div class="row">
@@ -38,9 +38,57 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12 col-md-6 col-lg-6">
-
+                        <div class="card card-default w-100 card-light">
+                            <div class="card-header">Últimas donaciones recibidas</div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    {% for donative in last_donation_receivers %}
+                                        <li class="list-group-item block-url" onclick="window.open(this.getAttribute('data-url-detail'), '_blank')" data-url-detail="{% url 'campaign.details' pk=donative.campaign_id %}" style="cursor: pointer;">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                                        <strong>{{donative.campaign.title}}</strong>
+                                                    </div>
+                                                    <div class="col text-right">{{donative.created|naturaltime}}</div>
+                                                </div>
+                                                <div class="row">
+                                                    <h6 class="lead">
+                                                       {{donative.username}} - {{donative.amount|floatformat:"2g"}}$
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor%}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-12 col-md-6 col-lg-6"></div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="card card-default w-100 card-light">
+                            <div class="card-header">Últimas donaciones realizadas</div>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    {% for donative in last_donation_made %}
+                                        <li class="list-group-item block-url" onclick="window.open(this.getAttribute('data-url-detail'), '_blank')" data-url-detail="{% url 'campaign.details' pk=donative.campaign_id %}" style="cursor: pointer;">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-8 col-lg-8">
+                                                        <strong>{{donative.campaign.title}}</strong>
+                                                    </div>
+                                                    <div class="col text-right">{{donative.created|naturaltime}}</div>
+                                                </div>
+                                                <div class="row">
+                                                    <h6 class="lead">
+                                                       {{donative.username}} - {{donative.amount|floatformat:"2g"}}$
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    {% endfor%}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

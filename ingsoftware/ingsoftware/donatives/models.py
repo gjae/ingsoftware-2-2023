@@ -37,6 +37,12 @@ class Donation(TimeStampedModel):
         
         return super().save(*args, **kwargs)
     
+    @property
+    def username(self):
+        if self.mark_as_annonymous:
+            return "Anónimo"
+        return self.user.name
+    
 
 class Comment(TimeStampedModel):
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE, related_name="comment")

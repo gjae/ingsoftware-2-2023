@@ -63,4 +63,9 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
         context["total_donated"] = donated["total"] if "total" in donated and donated["total"] is not None else 0.00 
         context["campaign_actives"] = actives["total"] if "total" in actives and actives["total"] is not None else 0
 
+
+
+        context["last_donation_receivers"] = Donation.objects.select_related("campaign").filter(campaign__user_id=self.request.user.id).order_by("-created")[0:6]
+        context["last_donation_made"] = Donation.objects.select_related("campaign").filter(user_id=self.request.user.id).order_by("-created")[0:6]
+
         return context
