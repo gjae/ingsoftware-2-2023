@@ -1,12 +1,16 @@
+from django.db.models import Sum, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic import RedirectView
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, TemplateView
 
 from ingsoftware.users.models import User
+
+from ingsoftware.campaigns.models import Campaign
+from ingsoftware.donatives.models import Donation
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -43,3 +47,20 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 
 user_redirect_view = UserRedirectView.as_view()
+
+
+class UserDashboardView(LoginRequiredMixin, TemplateView):
+    template_name = "dashboard/home.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        total_collected = Campaign.objects.filter(user_id=self.request.user.id).aggregate(total=Sum("total_collected"))
+        donated = Donation.objects.filter(user_id=self.request.user.id).aggregate(total=Sum("amount"))
+        actives = Campaign.objects.filter(user_id=self.request.user.id, status=Campaign.STATUS.progress).aggregate(total=Count("id"))
+
+        context["total_collected"] = total_collected["total"] if "total" in total_collected and total_collected["total"] is not None else 0.0
+        context["total_donated"] = donated["total"] if "total" in donated and donated["total"] is not None else 0.00 
+        context["campaign_actives"] = actives["total"] if "total" in actives and actives["total"] is not None else 0
+
+        return context

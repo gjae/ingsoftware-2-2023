@@ -98,7 +98,7 @@ class Campaign(TimeStampedModel, SoftDeletableModel):
         default=None
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="campaigns")
-    status = models.IntegerField(choices=STATUS, default=STATUS.draft)
+    status = models.IntegerField(choices=STATUS, default=STATUS.progress)
     beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE, related_name="campaigns", verbose_name="Beneficiario")
 
     objects = CampaignModelManager()
