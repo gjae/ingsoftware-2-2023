@@ -81,3 +81,13 @@ class UserCampaignView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Campaign.objects.list_preview().filter(user_id=self.request.user.id)
+    
+
+class UserDonationsView(LoginRequiredMixin, ListView):
+    template_name = "dashboard/donations.html"
+    model = Campaign
+    context_object_name = "donations"
+
+
+    def get_queryset(self):
+        return Donation.objects.select_related().filter(user_id=self.request.user.id)
