@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic import RedirectView
-from django.views.generic import UpdateView, TemplateView
+from django.views.generic import UpdateView, TemplateView, ListView
 
 from ingsoftware.users.models import User
 
@@ -68,4 +68,16 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
         context["last_donation_receivers"] = Donation.objects.select_related("campaign").filter(campaign__user_id=self.request.user.id).order_by("-created")[0:6]
         context["last_donation_made"] = Donation.objects.select_related("campaign").filter(user_id=self.request.user.id).order_by("-created")[0:6]
 
+        context["bests_campaigns"] = Campaign.objects.list_preview().filter(user_id=self.request.user.id).order_by("-current_progress")[0:3]
+
         return context
+    
+
+class UserCampaignView(LoginRequiredMixin, ListView):
+    template_name = "dashboard/campaigns.html"
+    model = Campaign
+    context_object_name = "campaigns"
+
+
+    def get_queryset(self):
+        return Campaign.objects.list_preview().filter(user_id=self.request.user.id)

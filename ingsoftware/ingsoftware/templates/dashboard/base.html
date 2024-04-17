@@ -20,6 +20,8 @@
 
     <link rel="stylesheet" href="{% static '/dashboard/dist/css/adminlte.min.css' %}" />
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    {% block css %}
+    {% endblock css%}
   </head>
   <body class="sidebar-mini" style="height: auto">
     <form action="/accounts/logout/" id="logout" method="post">
@@ -207,7 +209,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{% url 'users:dashboard.campaigns' %}" class="nav-link">
                   <i class="nav-icon fas fa-wallet"></i>
                   <p>
                     Mis Campañas
@@ -288,5 +290,7 @@
     <script src="{% static '/dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <script src="{% static '/dashboard/dist/js/adminlte.min.js' %}"></script>
+    {% block js %}
+    {% endblock js %}
   </body>
 </html>

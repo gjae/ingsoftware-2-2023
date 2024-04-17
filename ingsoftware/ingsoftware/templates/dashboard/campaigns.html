@@ -1,0 +1,77 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}Historial de campañas{% endblock title %}
+{% block page_title %}Historico de  campañas{% endblock page_title %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.4/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap5.css' %}">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+{% endblock css%}
+{% block body %}
+
+<section id="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-light card-default w-100">
+                <div class="card-body">
+                    <table class="table table-stripped" id="campaign_dt">
+                        <thead>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Donaciones recibidas</th>
+                            <th>Total recolectado</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            {% for c in campaigns %}
+                                <tr>
+                                    <td>{{c.id}}</td>
+                                    <td>{{c.title}}</td>
+                                    <td>{{c.total_donations}}</td>
+                                    <td>{{c.total_collected|floatformat:"2g"}}$ ({{c.current_progress|floatformat}}%)</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{% url 'campaign.details' pk=c.id %}" class="btn btn-sm btn-light"  target="_blank" rel="noopener noreferrer">
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </a>
+                                            <a href="#"  onclick="copyToClipBoard({{c.id}})" class="btn btn-sm btn-light" title="Copiar a portapapeles"  rel="noopener noreferrer">
+                                                <i class="fas fa-clipboard"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block js %}
+<script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+<script src="{% static 'js/dataTablesbs4.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap4.js' %}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script>
+function copyToClipBoard(id) {
+   // Copy the text inside the text field
+   let url = `${window.location.protocol}//${window.location.host}/campaigns/${id}/`
+  navigator.clipboard.writeText(url);
+  toastr.success("La URL de la campaña fue copiada al portapapeles correctamente")
+}
+
+$(document).ready(()=> {
+    let table = new DataTable('#campaign_dt', {
+        language: {
+            url: '/static/js/datatables.es.json'
+        }
+    });
+})
+</script>
+{% endblock js %}
