@@ -1,0 +1,119 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block title %}Perfil de usuario{% endblock title %}
+{% block page_title %}Perfil{% endblock page_title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-light w-100">
+                <div class="card-header">
+                    Datos de usuario
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'users:dashboard.profile.update' pk=request.user.id %}" enctype="multipart/form-data" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {{form_view.email|as_crispy_field}}
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {{form_view.card_id|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {{form_view.name|as_crispy_field}}
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {{form_view.profile_photo|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {{form_view.phone_number|as_crispy_field}}
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {{form_view.alternative_phone|as_crispy_field}}
+                            </div>
+                            <div class="col-12">
+                                {{form_view.address|as_crispy_field}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-light w-100">
+                <div class="card-header">
+                    Manejo de contraseña
+                </div>
+                <div class="card-body">
+                    <form action="{% url 'users:dashboard.profile.update_password' pk=request.user.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {% if form.fields.old_password %}
+                                    {{form.old_password|as_crispy_field}}
+                                {% else %}
+                                <label for="id_old_password">
+                                    Contraseña actual *
+                                </label>
+                                <input type="password" name="old_password" class="form-control" id="id_old_password">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {% if form.fields.new_password1 %}
+                                    {{form.new_password1|as_crispy_field}}
+                                {% else %}
+                                <label for="id_password">
+                                    Nueva contraseña *
+                                </label>
+                                <input type="password" name="new_password1" class="form-control" id="id_password">
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                {% if form.fields.new_password2 %}
+                                    {{form.new_password2|as_crispy_field}}
+                                {% else %}
+                                <label for="id_password2">
+                                    Repita la nueva contraseña *
+                                </label>
+                                <input type="password" name="new_password2" class="form-control" id="id_password2">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row pt-4">
+                            <div class="col-12">
+                                <button class="btn btn-primary">Guardar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,16 +1,24 @@
+from typing import Any
 from django.db.models import Sum, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.forms.models import BaseModelForm
 from django.urls import reverse
+from django.http.response import HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic import RedirectView
-from django.views.generic import UpdateView, TemplateView, ListView
+from django.views.generic import UpdateView, TemplateView, ListView, FormView
+from django.views.generic.edit import UpdateView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.forms import PasswordChangeForm
+
 
 from ingsoftware.users.models import User
 
 from ingsoftware.campaigns.models import Campaign
 from ingsoftware.donatives.models import Donation
+from .forms import UserProfileModelForm
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -91,3 +99,75 @@ class UserDonationsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Donation.objects.select_related().filter(user_id=self.request.user.id)
+    
+
+
+class ProfileUserView(LoginRequiredMixin, TemplateView):
+    template_name = "dashboard/profile.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["form_view"] = UserProfileModelForm(initial={
+            "name": self.request.user.name,
+            "email": self.request.user.email,
+            "phone_number": self.request.user.phone_number,
+            "alternative_phone": self.request.user.alternative_phone,
+            "address": self.request.user.address,
+            "card_id": self.request.user.card_id,
+            "profile_photo": self.request.user.profile_photo
+        })
+
+        return context
+    
+
+class ProfileUserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = "dashboard/profile.html"
+    form_class = UserProfileModelForm
+    model = User
+    success_message = "Su perfil de usuario ha sido correctamente actualizado"
+
+    def get_success_url(self) -> str:
+        return self.request.META.get("HTTP_REFERER")
+    
+
+class ProfileChangePasswordForm(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    form_class = PasswordChangeForm
+    model = User
+    success_message = "Su perfil de usuario ha sido correctamente actualizado"
+    template_name = "dashboard/profile.html"
+    
+    def get_form(self, form_class=None):
+        """Return an instance of the form to be used in this view."""
+        if form_class is None:
+            form_class = self.get_form_class()
+
+        form = form_class(self.request.user, **self.get_form_kwargs())
+        return form
+    
+    def form_valid(self, form):
+        form.save()
+
+        return HttpResponseRedirect(reverse("account_login"))
+    
+    def get_success_url(self) -> str:
+        print("URL ", self.request.META.get("HTTP_REFERER"))
+        return self.request.META.get("HTTP_REFERER")
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["form_view"] = UserProfileModelForm(initial={
+            "name": self.request.user.name,
+            "email": self.request.user.email,
+            "phone_number": self.request.user.phone_number,
+            "alternative_phone": self.request.user.alternative_phone,
+            "address": self.request.user.address,
+            "card_id": self.request.user.card_id,
+            "profile_photo": self.request.user.profile_photo
+        })
+
+        return context
+    

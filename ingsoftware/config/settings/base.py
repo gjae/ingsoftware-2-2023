@@ -4,6 +4,8 @@
 from pathlib import Path
 
 import environ
+from config import celery_app
+from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # ingsoftware/
@@ -19,6 +21,7 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
+APP_URL = env("APP_URL")
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -373,3 +376,15 @@ BOOTSTRAP5 = {
 }
 
 THOUSAND_SEPARATOR = "."
+
+
+celery_app.conf.beat_schedule = {
+    "change_status_to_expired_campaigns" : {
+        "task": "ingsoftware.campaigns.tasks.check_expires_campaigns",
+        "schedule": crontab(minute=0, hour='6,18') # Se ejecuta a diario a las 6 y as las 18
+    },
+    "check_campaigns_targets" : {
+        "task": "ingsoftware.campaigns.tasks.check_target_completeds",
+        "schedule": crontab(hour='*/3') # Se ejecuta cada 3 horas
+    },
+}

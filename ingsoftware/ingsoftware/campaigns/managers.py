@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Q
 
 
 class CampaignModelManager(models.Manager):
@@ -22,4 +22,17 @@ class CampaignModelManager(models.Manager):
                 )
             )
             .values("title", "summary", "target", "id", "created", "current_progress", "img_frontpage", "user_id", "total_collected", "total_donations")
+        )
+    
+    def list_completed_targets(self):
+        return (
+            super()
+            .get_queryset()
+            .select_related(
+                "user", 
+                "category"
+            )
+            .filter(date_target__date__gte=timezone.now().date())
+            .filter(target__lte=F("total_collected"))
+            .filter(Q(status=0) & Q(target_achieved_notified_at__isnull=True))
         )

@@ -10,7 +10,7 @@ from django.db.models import F
 
 from ingsoftware.campaigns.models import Campaign
 from ingsoftware.campaigns.forms import CampaignCreateForm
-from ingsoftware.donatives.models import Donation
+from ingsoftware.donatives.models import Donation, Comment
 
 
 class CampaingsListView(ListView):
@@ -42,6 +42,7 @@ class CampaignDetailView(DetailView):
         context["first_donator"] = Donation.objects.filter(campaign_id=self.kwargs.get("pk")).values("mark_as_annonymous", "user__name", "amount").order_by("created").first()
         context["most_important_donator"] = Donation.objects.filter(campaign_id=self.kwargs.get("pk")).values("mark_as_annonymous", "user__name", "amount").order_by("-amount").first()
         context["last_donator"] = Donation.objects.filter(campaign_id=self.kwargs.get("pk")).values("mark_as_annonymous", "user__name", "amount").order_by("created").last()
+        context["comments"] = Comment.objects.filter(donation__campaign_id=self.kwargs.get("pk")).select_related("donation", "donation__user")
         
         return context
     

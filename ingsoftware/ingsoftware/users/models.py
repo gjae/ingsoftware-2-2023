@@ -12,6 +12,10 @@ from model_utils import Choices
 
 from .managers import UserManager
 
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return "user_{0}/{1}".format(instance.id, filename)
+
 
 PAYMENT_METHOD_CHOICES = Choices(
     (0, "pm", "Pagomovil"),
@@ -36,11 +40,38 @@ class User(AbstractUser):
     """
 
     # First and last name do not cover name patterns around the globe
-    name = CharField(_("Name of User"), blank=True, max_length=255)
+    name = CharField("Nombre completo", blank=True, max_length=255)
     first_name = None  # type: ignore[assignment]
     last_name = None  # type: ignore[assignment]
     email = EmailField(_("email address"), unique=True)
     username = None  # type: ignore[assignment]
+    phone_number = models.CharField(
+        "Número de teléfono",
+        max_length=14,
+        blank=True,
+        default=""
+    )
+    alternative_phone = models.CharField(
+        "Número de teléfono alternativo",
+        max_length=14,
+        blank=True,
+        default=""
+    )
+    address = models.CharField(
+        "Dirección de residencia",
+        max_length=250,
+        blank=True,
+        default="",
+        help_text="Este dato se utilizara para control interno en esta aplicación."
+    )
+    card_id = models.PositiveIntegerField(
+        "Identificación",
+        db_index=True,
+        null=True, 
+        default=None
+    )
+
+    profile_photo = models.ImageField(upload_to=user_directory_path, null=True, default=None, verbose_name="Foto de perfil")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -56,6 +87,12 @@ class User(AbstractUser):
         """
         return reverse("users:detail", kwargs={"pk": self.id})
 
+    @property
+    def profile_photo_url(self):
+        if self.profile_photo:
+            return self.profile_photo.url
+        
+        return "/static/dashboard/dist/img/user2-160x160.jpg"
 
 
 class PaymentMethodBasedInformation(TimeStampedModel):

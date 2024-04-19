@@ -101,6 +101,13 @@ class Campaign(TimeStampedModel, SoftDeletableModel):
     status = models.IntegerField(choices=STATUS, default=STATUS.progress)
     beneficiary = models.ForeignKey(Beneficiary, on_delete=models.CASCADE, related_name="campaigns", verbose_name="Beneficiario")
 
+    target_achieved_notified_at = models.DateTimeField(
+        "Notifiacacion de objetivo alcanzado",
+        null=True,
+        default=None
+    )
+
+
     objects = CampaignModelManager()
 
 

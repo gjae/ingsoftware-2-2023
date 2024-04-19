@@ -32,6 +32,33 @@
                     </p>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr>
+                </div>
+            </div>
+            {% for comment in comments %}
+                <div class="row">
+                    <div class="col-12"><hr></div>
+                    <div class="col-sm-4 col-lg-1 col-md-1 p-3">
+                        <img src="{{comment.donation.profile_image}}" class="img-thumbnail" alt="">
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-12">
+                                <strong>{{comment.donation.username}} | {{comment.donation.amount|floatformat:"2g"}} $</strong>
+                            </div>
+                            <div class="col-12">
+                                <small class="text-reset text-secondary">{{comment.created|date:"d/m/Y"}}</small>
+                                <div class="col-2"><hr></div>
+                            </div>
+                            <div class="col-12">
+                                <p class="lead">{{comment.comment}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
         <div class="col">
             <div class="card card-light card-default" id="sticky-area">

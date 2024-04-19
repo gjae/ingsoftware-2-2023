@@ -4,6 +4,7 @@ from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django.contrib.auth import forms as admin_forms
 from django.forms import EmailField
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.forms import PasswordChangeForm
 
 from .models import User
 
@@ -49,3 +50,13 @@ class UserSocialSignupForm(SocialSignupForm):
     Default fields will be added automatically.
     See UserSignupForm otherwise.
     """
+
+
+class UserProfileModelForm(forms.ModelForm):
+
+    email = forms.EmailField(disabled=True, label="Correo electrónico")
+
+    class Meta:
+        model = User
+        exclude = ["created", "modified", "password", "date_joined", "is_active"]
+        readonly_fields = ["email",]

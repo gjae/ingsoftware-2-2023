@@ -43,6 +43,13 @@ class Donation(TimeStampedModel):
             return "Anónimo"
         return self.user.name
     
+    @property
+    def profile_image(self):
+        if self.mark_as_annonymous:
+            return "https://e7.pngegg.com/pngimages/419/473/png-clipart-computer-icons-user-profile-login-user-heroes-sphere-thumbnail.png"
+        
+        return self.user.profile_photo_url
+    
 
 class Comment(TimeStampedModel):
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE, related_name="comment")
