@@ -3,6 +3,7 @@ version: '3'
 volumes:
   ingsoftware_local_postgres_data: {}
   ingsoftware_local_postgres_data_backups: {}
+  dev_traefik: {}
 
 services:
   django: &django
