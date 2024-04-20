@@ -80,7 +80,7 @@ services:
   traefik:
     build:
       context: .
-      dockerfile: ./compose/preprod/traefik/Dockerfile
+      dockerfile: ./compose/preprod/Dockerfile
     image: ingsoftware_preprod_traefik
     depends_on:
       - django

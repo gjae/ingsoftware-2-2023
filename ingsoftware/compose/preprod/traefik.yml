@@ -18,7 +18,7 @@ entryPoints:
   flower:
     address: ":5555"
 
-  mailhog:
+  mailpit:
     address: ":8025"
 
 certificatesResolvers:
@@ -45,7 +45,7 @@ http:
         certResolver: letsencrypt
 
     flower-secure-router:
-      rule: "Host(`dev.fundve.xyz`)"
+      rule: "Host(`flower.fundve.xyz`)"
       entryPoints:
         - flower
       service: flower
@@ -53,11 +53,11 @@ http:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
 
-    mailhog-secure-router:
+    mailpit-secure-router:
       rule: "Host(`devmail.fundve.xyz`)"
       entryPoints:
-        - mailhog
-      service: mailhog
+        - mailpit
+      service: mailpit
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
@@ -80,10 +80,10 @@ http:
         servers:
           - url: http://flower:5555
 
-    mailhog:
+    mailpit:
       loadBalancer:
         servers:
-          - url: http://mailhog:8025
+          - url: http://mailpit:8025
 
 providers:
   # https://docs.traefik.io/master/providers/file/
