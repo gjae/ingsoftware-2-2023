@@ -69,4 +69,4 @@ INSTALLED_APPS += ["django_extensions"]
 CELERY_TASK_EAGER_PROPAGATES = True
 # Your stuff...
 # ------------------------------------------------------------------------------
-CSRF_TRUSTED_ORIGINS = ["fundve.xyz",]
+CSRF_TRUSTED_ORIGINS = ["https://fundve.xyz",]
