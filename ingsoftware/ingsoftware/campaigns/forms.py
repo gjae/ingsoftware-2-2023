@@ -40,4 +40,4 @@ class CampaignCreateForm(forms.ModelForm):
 
     class Meta:
         model = Campaign
-        exclude = ["created", "modified", "summary", "total_collected", "total_donations", "status"]
+        exclude = ["created", "modified", "summary", "total_collected", "total_donations", "status", "target_achieved_notified_at"]

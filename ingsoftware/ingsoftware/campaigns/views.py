@@ -56,7 +56,6 @@ class CreateCampaignFormView(LoginRequiredMixin, SuccessMessageMixin, CreateView
     def get_success_url(self) -> str:
         return reverse("campaign.details", kwargs={"pk": self.object.pk})
     
-
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super().get_form_kwargs(*args, **kwargs)
         kwargs["title"] = self.request.GET.get("title", None)
