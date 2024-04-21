@@ -21,7 +21,7 @@ class CampaignModelManager(models.Manager):
                     F("total_collected") * 100 / F("target")
                 )
             )
-            .values("title", "summary", "target", "id", "created", "current_progress", "img_frontpage", "user_id", "total_collected", "total_donations")
+            .values("title", "summary", "target", "id", "created", "current_progress", "img_frontpage", "user_id", "total_collected", "status", "total_donations")
         )
     
     def list_completed_targets(self):

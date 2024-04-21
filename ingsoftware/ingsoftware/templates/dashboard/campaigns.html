@@ -14,12 +14,27 @@
 <section id="content">
     <div class="row">
         <div class="col-12">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{message}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
             <div class="card card-light card-default w-100">
                 <div class="card-body">
                     <table class="table table-stripped" id="campaign_dt">
                         <thead>
                             <th>ID</th>
                             <th>Título</th>
+                            <th>Estado</th>
                             <th>Donaciones recibidas</th>
                             <th>Total recolectado</th>
                             <th></th>
@@ -29,6 +44,28 @@
                                 <tr>
                                     <td>{{c.id}}</td>
                                     <td>{{c.title}}</td>
+                                    <td>
+                                        {% if c.status == 0 %}
+                                           <strong class="badge badge-primary">
+                                            En progreso
+                                           </strong>
+                                        {% endif %}
+                                        {% if c.status == 1 %}
+                                            <strong class="badge badge-success">
+                                                Finalizada
+                                            </strong>
+                                        {% endif %}
+                                        {% if c.status == 2 %}
+                                            <strong class="badge badge-warning">
+                                                Cancelada
+                                            </strong>
+                                        {% endif %}
+                                        {% if c.status == 3 %}
+                                            <strong class="badge badge-light">
+                                                En borrador
+                                            </strong>
+                                        {% endif %}
+                                    </td>
                                     <td>{{c.total_donations}}</td>
                                     <td>{{c.total_collected|floatformat:"2g"}}$ ({{c.current_progress|floatformat}}%)</td>
                                     <td>
@@ -39,6 +76,13 @@
                                             <a href="#"  onclick="copyToClipBoard({{c.id}})" class="btn btn-sm btn-light" title="Copiar a portapapeles"  rel="noopener noreferrer">
                                                 <i class="fas fa-clipboard"></i>
                                             </a>
+                                            <button onclick="cancel({{c.id}})" class="btn btn-xs btn-light">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <form id="pm-{{c.id}}" action="{% url 'users:dashboard.campaigns.cancel'  %}" method="post">
+                                                {% csrf_token %}                                                          
+                                                <input type="hidden" name="pk" value="{{c.id}}">
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -58,12 +102,32 @@
 <script src="{% static 'js/dataTablesbs4.js' %}"></script>
 <script src="{% static 'js/dataTables.bootstrap4.js' %}"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 function copyToClipBoard(id) {
    // Copy the text inside the text field
    let url = `${window.location.protocol}//${window.location.host}/campaigns/${id}/`
   navigator.clipboard.writeText(url);
   toastr.success("La URL de la campaña fue copiada al portapapeles correctamente")
+}
+
+function cancel(pk) {
+    const form = document.getElementById(`pm-${pk}`)
+    
+    Swal.fire({
+        icon: "warning",
+        title: "Advertencia",
+        text: "¿Está seguro que desea cancelar campaña?, la acción no podrá ser revertida",
+        showConfirmButton: true,
+        confirmButtonText: "Aceptar",            
+        showCancelButton: true, 
+        cancelButtonText: "Cancelar"
+    }).then(opt => {
+        if (opt.isConfirmed) {
+            form.submit()
+        }
+    })
 }
 
 $(document).ready(()=> {

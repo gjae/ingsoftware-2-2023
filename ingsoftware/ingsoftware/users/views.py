@@ -3,22 +3,25 @@ from django.db.models import Sum, Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.forms.models import BaseModelForm
+from django.http import HttpRequest, HttpResponse
 from django.urls import reverse
-from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic import RedirectView
-from django.views.generic import UpdateView, TemplateView, ListView, FormView
-from django.views.generic.edit import UpdateView
+from django.views.generic import UpdateView, TemplateView, ListView, FormView, DeleteView
+from django.views.generic.edit import UpdateView, CreateView
+from django.views.generic.base import ContextMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.messages import success
 from django.contrib.auth.forms import PasswordChangeForm
 
 
-from ingsoftware.users.models import User
+from ingsoftware.users.models import User, PaymentMethod
 
 from ingsoftware.campaigns.models import Campaign
 from ingsoftware.donatives.models import Donation
-from .forms import UserProfileModelForm
+from .forms import UserProfileModelForm, UserPaymentMethodForm
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -91,6 +94,22 @@ class UserCampaignView(LoginRequiredMixin, ListView):
         return Campaign.objects.list_preview().filter(user_id=self.request.user.id)
     
 
+class CancelCampaignView(LoginRequiredMixin, DeleteView):
+    def get_success_url(self) -> str:
+        return reverse("users:dashboard.campaigns")
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        campaign = Campaign.objects.filter(user_id=self.request.user.id, id=int(self.request.POST.get("pk")))
+
+        if campaign is None:
+            return HttpResponseBadRequest()
+        
+
+        campaign.update(status=Campaign.STATUS.canceled)
+        success(self.request, "La campaña fue cancelada")
+        return HttpResponseRedirect(self.get_success_url())
+    
+
 class UserDonationsView(LoginRequiredMixin, ListView):
     template_name = "dashboard/donations.html"
     model = Campaign
@@ -102,9 +121,8 @@ class UserDonationsView(LoginRequiredMixin, ListView):
     
 
 
-class ProfileUserView(LoginRequiredMixin, TemplateView):
+class ProfileSettinMixin(ContextMixin):
     template_name = "dashboard/profile.html"
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -119,11 +137,26 @@ class ProfileUserView(LoginRequiredMixin, TemplateView):
             "profile_photo": self.request.user.profile_photo
         })
 
+        context["payment_methods"] = (
+            PaymentMethod
+            .objects
+            .filter(user_id=self.request.user.id)
+            .select_related("based")
+            .annotate(
+                qtty_donatives_using=Count("donatives")
+            )
+        )
+
+
         return context
     
 
+
+class ProfileUserView(LoginRequiredMixin, ProfileSettinMixin,  TemplateView):
+    pass
+
+
 class ProfileUserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    template_name = "dashboard/profile.html"
     form_class = UserProfileModelForm
     model = User
     success_message = "Su perfil de usuario ha sido correctamente actualizado"
@@ -132,12 +165,11 @@ class ProfileUserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView)
         return self.request.META.get("HTTP_REFERER")
     
 
-class ProfileChangePasswordForm(LoginRequiredMixin, SuccessMessageMixin, FormView):
+class ProfileChangePasswordForm(LoginRequiredMixin, SuccessMessageMixin,  ProfileSettinMixin, FormView):
     form_class = PasswordChangeForm
     model = User
     success_message = "Su perfil de usuario ha sido correctamente actualizado"
-    template_name = "dashboard/profile.html"
-    
+
     def get_form(self, form_class=None):
         """Return an instance of the form to be used in this view."""
         if form_class is None:
@@ -156,18 +188,48 @@ class ProfileChangePasswordForm(LoginRequiredMixin, SuccessMessageMixin, FormVie
         return self.request.META.get("HTTP_REFERER")
     
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
 
-        context["form_view"] = UserProfileModelForm(initial={
-            "name": self.request.user.name,
-            "email": self.request.user.email,
-            "phone_number": self.request.user.phone_number,
-            "alternative_phone": self.request.user.alternative_phone,
-            "address": self.request.user.address,
-            "card_id": self.request.user.card_id,
-            "profile_photo": self.request.user.profile_photo
-        })
+class PaymentMethodCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    template_name = "dashboard/payment_methods/create.html"
+    form_class = UserPaymentMethodForm
+    success_message = "Su nueva cuenta %(account_number)s fue correctamente creada. Ahora podra ser elegible en sus campañas"
 
-        return context
+    def get_success_url(self) -> str:
+        return reverse("users:dashboard.profile")
     
+
+class PaymentMethodUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    template_name = "dashboard/payment_methods/create.html"
+    form_class = UserPaymentMethodForm
+    success_message = "Su nueva cuenta %(account_number)s fue correctamente actualizada."
+    queryset = PaymentMethod.objects.select_related()
+
+    def get_success_url(self) -> str:
+        return reverse("users:dashboard.profile")
+    
+
+class PaymentMethodDeleteView(LoginRequiredMixin, DeleteView):
+    template_name = "dashboard/payment_methods/create.html"
+    form_class = UserPaymentMethodForm
+    queryset = PaymentMethod.objects.select_related()
+
+    def get_success_url(self) -> str:
+        return reverse("users:dashboard.profile")
+    
+
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        print(request.POST)
+        method = PaymentMethod.objects.filter(user_id=self.request.user.id, id=int(self.request.POST.get("pk"))).annotate(
+            qtty_donatives_using=Count("donatives")
+        ).first()
+
+        if method is None:
+            return HttpResponseBadRequest()
+        
+        if method.qtty_donatives_using > 0:
+            return HttpResponseBadRequest()
+
+        method.delete()
+        success(self.request, "El metodo de pago fue eliminado exitosamente")
+        return HttpResponseRedirect(self.get_success_url())

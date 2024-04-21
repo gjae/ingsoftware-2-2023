@@ -6,7 +6,7 @@ from django.forms import EmailField
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.forms import PasswordChangeForm
 
-from .models import User
+from .models import User, PaymentMethod, PaymentMethodBasedInformation
 
 
 class UserAdminChangeForm(admin_forms.UserChangeForm):
@@ -60,3 +60,23 @@ class UserProfileModelForm(forms.ModelForm):
         model = User
         exclude = ["created", "modified", "password", "date_joined", "is_active"]
         readonly_fields = ["email",]
+
+
+class UserPaymentMethodForm(forms.ModelForm):
+    account_note = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 3}),
+        label="Agrega una observación",
+        required=False,
+        initial=""
+    )
+
+    based = forms.ModelChoiceField(
+        widget=forms.Select(attrs={"class": "form-control"}),
+        queryset=PaymentMethodBasedInformation.objects.all(),
+        label="Banco",
+        empty_label="Sin información"
+    )
+
+    class Meta:
+        model = PaymentMethod
+        exclude = ["created", "modified", ]

@@ -106,13 +106,13 @@ class PaymentMethodBasedInformation(TimeStampedModel):
 
 class PaymentMethod(TimeStampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="payment_methods")
-    card_id = models.PositiveIntegerField()
-    payment_method = models.PositiveIntegerField(choices=PAYMENT_METHOD_CHOICES)
+    card_id = models.PositiveIntegerField("Cédula del titular")
+    payment_method = models.PositiveIntegerField("Metodo de pago", choices=PAYMENT_METHOD_CHOICES)
     account_named = models.CharField("Titular de la cuenta", max_length=85)
     account_number = models.CharField("Número de cuenta", max_length=100, db_index=True)
     account_note = models.CharField("Agrega una nota", max_length=200, blank=True, default="")
     account_type = models.PositiveSmallIntegerField("Tipo de cuenta", choices=PAYMENT_ACCOUNT_TYPES, null=True, default=None)
-    based = models.ForeignKey(PaymentMethodBasedInformation, on_delete=models.RESTRICT, related_name="payment_methods")
+    based = models.ForeignKey(PaymentMethodBasedInformation, on_delete=models.RESTRICT, related_name="payment_methods", verbose_name="Banco")
 
 
     @property
